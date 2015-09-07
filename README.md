@@ -1,2 +1,2 @@
-# DependencyGraph
-Visualizing Python Project Dependency Graphs
+# Spider
+Visualizing Python Project Import Graphs
