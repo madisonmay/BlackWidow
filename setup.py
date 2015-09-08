@@ -6,7 +6,9 @@ setup(
     author="Madison May",
     author_email="madison@indico.io",
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        "networkx==1.10"
+    ],
     description="""
         Visualizing and refactoring python project import graphs.
     """,

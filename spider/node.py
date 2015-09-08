@@ -20,6 +20,7 @@ class Node(object):
         self.edges = imported_modules(filename, package_root=package_root)
         self.imports = list(itertools.chain(*[edge.imports for edge in self.edges]))
 
+
 class Import(object):
     """
     Standardizes ast.Import and ast.ImportFrom objects into a common format
