@@ -12,4 +12,4 @@ python -m blackwidow.web [module_name]
 ```
 
 Sample results (for Kenneth Reitz's `requests` library):
-![Requests Project Graph](http://i.imgur.com/gwYYppX.png)
+![Requests Project Graph](http://i.imgur.com/Q5P8z0Q.png)
