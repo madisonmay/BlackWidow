@@ -2,7 +2,7 @@ import os
 import ast
 import itertools
 
-from spider.error import SpiderIOError, SpiderValueError
+from blackwidow.error import BlackWidowIOError, BlackWidowValueError
 
 
 class Node(object):

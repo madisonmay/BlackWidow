@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="spider",
+    name="blackwidow",
     version="0.1.0",
     author="Madison May",
     author_email="madison@indico.io",

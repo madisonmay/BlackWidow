@@ -1,12 +1,12 @@
-# Spider
+# BlackWidow
 Visualizing Python Project Import Graphs
 
 Installation:
 ```
-sudo pip install spider
+sudo pip install blackwidow
 ```
 
 Demo with:
 ```
-python -m spider.web [path-to-package]
+python -m blackwidow.web [path-to-package]
 ```

@@ -4,9 +4,9 @@ import json
 import networkx as nx
 from networkx.readwrite import json_graph
 
-import spider.config as config
-from spider.node import Node
-from spider.viz.server import serve
+import blackwidow.config as config
+from blackwidow.node import Node
+from blackwidow.viz.server import serve
 
 
 class Web(object):
