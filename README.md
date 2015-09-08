@@ -8,5 +8,5 @@ sudo pip install blackwidow
 
 Demo with:
 ```
-python -m blackwidow.web [path-to-package]
+python -m blackwidow.web [module_name]
 ```

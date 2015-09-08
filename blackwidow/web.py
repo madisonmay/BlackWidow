@@ -73,7 +73,11 @@ def find_files(dir, exclude=None):
 
 
 if __name__ == "__main__":
-    import sys
-    path = sys.argv[1]
-    web = Web(path)
+    import os, sys
+    
+    module = sys.argv[1] 
+    module = __import__(module)
+    project_path = os.path.dirname(module.__file__)
+
+    web = Web(project_path)
     web.visualize()

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="blackwidow",
-    version="0.1.0",
+    version="0.1.1",
     author="Madison May",
     author_email="madison@indico.io",
     packages=find_packages(),

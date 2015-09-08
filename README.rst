@@ -1,5 +1,5 @@
 BlackWidow
-======
+==========
 
 Visualizing Python Project Import Graphs
 
@@ -13,5 +13,5 @@ Demo with:
 
 ::
 
-    python -m blackwidow.web [path-to-package]
+    python -m blackwidow.web [module_name]
 
