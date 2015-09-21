@@ -1,5 +1,7 @@
 import os
 import json
+import re
+from functools import partial
 
 import networkx as nx
 from networkx.readwrite import json_graph
@@ -7,6 +9,7 @@ from networkx.readwrite import json_graph
 import blackwidow.config as config
 from blackwidow.node import Node
 from blackwidow.viz.server import serve
+from blackwidow.imports import import_path
 
 
 class Web(object):
@@ -16,21 +19,34 @@ class Web(object):
     """
 
     def __init__(self, package_root, exclude=None):
-        files = find_files(package_root, exclude=exclude)
+        self.files = find_files(package_root, exclude=exclude)
         self.package_root = package_root
+        self.module = import_path(package_root, os.path.dirname(package_root)) 
         self.nodes = [
-            Node(file, package_root=self.package_root) for file in files
+            Node(file, package_root=self.package_root) for file in self.files
         ]
+
+        package_import_path = partial(import_path, package_root=os.path.dirname(package_root))
+        self.package_modules = set(map(package_import_path, self.files))
 
         self.graph = nx.Graph()
 
         for node in self.nodes:
+            if node.module not in self.package_modules:
+                continue
             self.graph.add_node(node.module)
             self.graph.node[node.module]['name'] = node.module
 
-        for node in self.nodes:
             for module in node.imports:
-                self.graph.add_edge(node.module, module)
+                module = self._package_module(module)
+                if module in self.package_modules:
+                    self.graph.add_edge(node.module, module)
+
+    def _package_module(self, module):
+        if not module.startswith(self.module):
+            module = ".".join([self.module, module])
+        return module
+
 
     def visualize(self, port=None):
         """
@@ -58,13 +74,12 @@ def find_files(dir, exclude=None):
     Given a root directory, compiles a list of python files to analyze.
     If a discovered python file is provided in the list of excluded, it will be ignored
     """
-    if not exclude:
-        exclude = []
-
     matches = []
     for root, dirs, files in os.walk(dir):
         for file in files:
-            if file.endswith(".py") and not file in exclude:
+            if exclude and re.match(exclude, file):
+                continue
+            if file.endswith(".py"):
                 matches.append(
                     os.path.abspath(os.path.join(root, file))
                 )
@@ -75,9 +90,11 @@ def find_files(dir, exclude=None):
 if __name__ == "__main__":
     import os, sys
     
-    module = sys.argv[1] 
-    module = __import__(module)
-    project_path = os.path.dirname(module.__file__)
+    package_name = sys.argv[1] 
+    package = __import__(package_name)
+    if "__init__" not in package.__file__:
+        raise ValueError('Not a package: %s' % package_name)
+    project_path = os.path.dirname(package.__file__)
 
-    web = Web(project_path)
+    web = Web(project_path, exclude=".*test*")
     web.visualize()
