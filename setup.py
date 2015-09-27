@@ -1,10 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
 setup(
     name="blackwidow",
-    version="0.1.4",
+    version="0.1.5",
     author="Madison May",
     author_email="madison@indico.io",
-    packages=["blackwidow"],
+    packages=find_packages(),
     install_requires=[
         "networkx==1.10"
     ],
@@ -17,5 +18,5 @@ setup(
     """,
     license="MIT License (See LICENSE)",
     long_description=open("README.rst").read(),
-    url="https://github.com/madisonmay/spider"
+    url="https://github.com/madisonmay/blackwidow"
 )
