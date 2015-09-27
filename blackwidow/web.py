@@ -1,7 +1,8 @@
 import os
 import json
 import re
-from functools import partial
+from functools import partial   
+from fnmatch import fnmatch
 
 import networkx as nx
 from networkx.readwrite import json_graph
@@ -74,27 +75,38 @@ def find_files(dir, exclude=None):
     Given a root directory, compiles a list of python files to analyze.
     If a discovered python file is provided in the list of excluded, it will be ignored
     """
+    if not exclude:
+        exclude = []
+
     matches = []
     for root, dirs, files in os.walk(dir):
         for file in files:
-            if exclude and re.match(exclude, file):
+            filepath = os.path.abspath(os.path.join(root, file))
+            if any(fnmatch(filepath, pattern) for pattern in exclude):
                 continue
-            if file.endswith(".py"):
-                matches.append(
-                    os.path.abspath(os.path.join(root, file))
-                )
+
+            if filepath.endswith(".py"):
+                matches.append(filepath)
 
     return matches
 
 
 if __name__ == "__main__":
-    import os, sys
-    
-    package_name = sys.argv[1] 
+    import os, sys, argparse
+
+    parser = argparse.ArgumentParser(description='Visualize Python Project Imports')
+    parser.add_argument('package', help='name of python package to analyze')
+    parser.add_argument(
+        '--exclude', nargs='+', metavar="pattern", 
+        help='list of files patterns to exclude'
+    )
+    args = parser.parse_args()
+
+    package_name = args.package 
     package = __import__(package_name)
     if "__init__" not in package.__file__:
         raise ValueError('Not a package: %s' % package_name)
     project_path = os.path.dirname(package.__file__)
 
-    web = Web(project_path, exclude=".*test*")
+    web = Web(project_path, exclude=args.exclude)
     web.visualize()

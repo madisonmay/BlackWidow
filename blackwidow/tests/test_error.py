@@ -1,4 +1,4 @@
-from .. import error
+from blackwidow import error
 
-def test_spider_error():
-    assert isinstance(error.SpiderIOError(), IOError)
+def test_blackwidow_error():
+    assert isinstance(error.BlackWidowIOError(), IOError)
