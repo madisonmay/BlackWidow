@@ -13,9 +13,34 @@ Demo with:
 
 ::
 
-    python -m blackwidow.web [module_name]
+    python -m blackwidow.web [package_name]
 
-| Sample results (for Kenneth Reitz's ``requests`` library):
-| |Requests Project Graph|
+Optionally pass in a list of file patterns to exclude
 
-.. |Requests Project Graph| image:: http://i.imgur.com/Q5P8z0Q.png
+::
+
+    python -m blackwidow.web [package_name] --exclude *test*
+
+Once the visualization is displayed, you can inspect file names by
+hovering over a node.
+
+Sample results:
+
+Requests:
+'''''''''
+
+|Requests Project Graph|
+
+Flask:
+''''''
+
+|Flask Project Graph|
+
+BlackWidow:
+'''''''''''
+
+|BlackWidow Project Graph|
+
+.. |Requests Project Graph| image:: http://i.imgur.com/RdUrRAC.png
+.. |Flask Project Graph| image:: http://i.imgur.com/az7huA2.png
+.. |BlackWidow Project Graph| image:: http://i.imgur.com/BroPIu8.png
