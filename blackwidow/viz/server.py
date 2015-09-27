@@ -17,7 +17,7 @@ def serve(directory, filename, port):
         SimpleHTTPServer.SimpleHTTPRequestHandler
     )
     thread.start_new_thread(httpd.serve, ())
-    webbrowser.open('http://%s:%s/%s' % (base_url, port, filename))
+    # webbrowser.open('http://%s:%s/%s' % (base_url, port, filename))
     raw_input("Press <RETURN> to stop server\n")
     httpd.stop()
 

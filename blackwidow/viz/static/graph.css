@@ -7,3 +7,8 @@ line.link {
   stroke: #999;
   stroke-opacity: .6;
 }
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}

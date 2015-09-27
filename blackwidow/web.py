@@ -54,6 +54,7 @@ class Web(object):
         Dumps graph data to a json file and renders using d3's force-directed graph
         """
         json_data = json_graph.node_link_data(self.graph)
+        json_data['package_name'] = self.module
 
         parent_dir = os.path.abspath(os.path.dirname(__file__))
         viz_dir = os.path.join(parent_dir, 'viz', 'static')
