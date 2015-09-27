@@ -1,46 +1,34 @@
-"""
-Simple server for loading d3 json files
-Adapted from networkx example at:
-    https://github.com/networkx/networkx/blob/master/examples/javascript/http_server.py
-"""
-import SimpleHTTPServer, BaseHTTPServer
-import socket
-import thread
-import webbrowser
-import os
+import tornado.ioloop
+import os.path
 
-def serve(directory, filename, port):
-    base_url = "127.0.0.1"
-    os.chdir(directory)
-    httpd = StoppableHTTPServer(
-        (base_url, port), 
-        SimpleHTTPServer.SimpleHTTPRequestHandler
-    )
-    thread.start_new_thread(httpd.serve, ())
-    webbrowser.open('http://%s:%s/%s' % (base_url, port, filename))
-    raw_input("Press <RETURN> to stop server\n")
-    httpd.stop()
+import tornado.web
 
+from blackwidow import config
 
-class StoppableHTTPServer(BaseHTTPServer.HTTPServer):
+PARENT_DIR = os.path.abspath(os.path.dirname(__file__))
+STATIC_DIR = os.path.join(PARENT_DIR, 'static')
+HTML_FILE = os.path.join(STATIC_DIR, 'graph.html')
 
-    def server_bind(self):
-        BaseHTTPServer.HTTPServer.server_bind(self)
-        self.socket.settimeout(1)
-        self.run = True
+class MainHandler(tornado.web.RequestHandler):
 
-    def get_request(self):
-        while self.run:
-            try:
-                sock, addr = self.socket.accept()
-                sock.settimeout(None)
-                return (sock, addr)
-            except socket.timeout:
-                pass
+    def get(self):
+        self.render(HTML_FILE)
 
-    def stop(self):
-        self.run = False
+class DataHandler(tornado.web.RequestHandler):
 
-    def serve(self):
-        while self.run:
-            self.handle_request()
+    def get(self):
+        self.write(self.json_data)
+
+application = tornado.web.Application([
+    (r"/", MainHandler),
+    (r"/json", DataHandler)
+], static_path=STATIC_DIR)
+
+def serve(data, port=None):
+    """
+    Render graph visualization
+    """
+    DataHandler.json_data = data
+    application.listen(port or config.PORT)
+    print("Navigate to http://localhost:%d/ to view the package graph" % config.PORT)
+    tornado.ioloop.IOLoop.current().start()

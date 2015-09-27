@@ -51,24 +51,11 @@ class Web(object):
 
     def visualize(self, port=None):
         """
-        Dumps graph data to a json file and renders using d3's force-directed graph
+        Dumps graph data to a dictionary and renders using d3's force-directed graph
         """
         json_data = json_graph.node_link_data(self.graph)
         json_data['package_name'] = self.module
-
-        parent_dir = os.path.abspath(os.path.dirname(__file__))
-        viz_dir = os.path.join(parent_dir, 'viz', 'static')
-        json_file = os.path.join(viz_dir, 'graph.json')
-        html_file = os.path.join(viz_dir, 'graph.html')
-        relative_path = os.path.relpath(html_file, viz_dir)
-
-        with open(json_file, 'w') as fd:
-            json.dump(json_data, fd)
-
-        if not port:
-            port = config.PORT
-
-        serve(directory=viz_dir, filename=relative_path, port=port)
+        serve(data=json_data, port=port)
 
 
 def find_files(dir, exclude=None):
